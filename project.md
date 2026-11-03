@@ -56,7 +56,11 @@ related:
 ## Firmware Architecture
 
 - `src/main.cpp`: อ่านคำสั่ง `EN`/`TH` ผ่าน USB Serial และแสดงคำย่อภาษาขนาดใหญ่บน OLED
-- `host-app/keyboard_language.py`: อ่าน keyboard layout ของหน้าต่างที่กำลังใช้งานบน Windows แล้วส่งสถานะผ่าน Serial
+- `host-app/keyboard_language.py`: อ่าน keyboard layout ของหน้าต่างที่กำลังใช้งานบน Windows แล้วส่งสถานะผ่าน Serial; รอ reconnect เมื่อไม่มีบอร์ด
+- `host-app/setup_windows.ps1`: build แอปแบบ standalone และติดตั้งบนเครื่องผู้ใช้ปัจจุบัน พร้อมเพิ่ม shortcut ใน Startup
+- `host-app/build_shareable_installer.ps1`: รวม standalone app เป็น `OledLanguageIndicatorSetup.exe` สำหรับแชร์
+- `host-app/installer_source/install_payload.ps1`: ติดตั้ง payload และตั้ง auto-start ในเครื่องผู้รับ
+- `host-app/uninstall_windows.ps1`: ถอนแอปและลบ shortcut auto-start
 
 ## Libraries
 
@@ -73,7 +77,7 @@ related:
 
 - `pio run` ผ่านแล้วโดยใช้ PlatformIO Raspberry Pi platform / Arduino Mbed core กับ board target `pico`
 - Firmware แสดง `--` จนกว่า host app จะส่งสถานะภาษา
-- ยังไม่ได้ทดสอบ host app กับบอร์ดจริง
+- Host app/installer ยังไม่ได้ build และทดสอบบน Windows เครื่องจริง
 - รุ่นคอนโทรลเลอร์ OLED และ I²C address จริงยังไม่ยืนยัน
 
 ## Open Questions

@@ -40,11 +40,11 @@ def get_keyboard_language() -> str:
     return "--"
 
 
-def find_device_port() -> str:
+def find_device_port() -> str | None:
     for port in list_ports.comports():
         if port.vid == 0x2E8A and port.pid == 0x00C0:
             return port.device
-    raise RuntimeError("ไม่พบ RP2040-Zero (USB VID:PID 2E8A:00C0)")
+    return None
 
 
 def main() -> int:
@@ -55,24 +55,33 @@ def main() -> int:
     if sys.platform != "win32":
         parser.error("โปรแกรมนี้ใช้ Windows API และทำงานบน Windows เท่านั้น")
 
-    try:
-        port_name = args.port or find_device_port()
-        with serial.Serial(port_name, BAUD_RATE, timeout=0.1, write_timeout=1) as device:
-            print(f"ส่งสถานะภาษาไปยัง {port_name}; กด Ctrl+C เพื่อหยุด")
+    device = None
+    previous_language = None
+    while True:
+        try:
+            if device is None:
+                port_name = args.port or find_device_port()
+                if port_name is None:
+                    time.sleep(2)
+                    continue
+                device = serial.Serial(port_name, BAUD_RATE, timeout=0.1, write_timeout=1)
+                previous_language = None
+
+            language = get_keyboard_language()
+            if language != previous_language:
+                device.write((language + "\n").encode("ascii"))
+                previous_language = language
+            time.sleep(0.2)
+        except KeyboardInterrupt:
+            if device is not None:
+                device.close()
+            return 0
+        except serial.SerialException:
+            if device is not None:
+                device.close()
+            device = None
             previous_language = None
-            while True:
-                language = get_keyboard_language()
-                if language != previous_language:
-                    device.write((language + "\n").encode("ascii"))
-                    previous_language = language
-                    print(f"Keyboard: {language}")
-                time.sleep(0.2)
-    except KeyboardInterrupt:
-        print("\nหยุดโปรแกรมแล้ว")
-    except (serial.SerialException, RuntimeError) as error:
-        print(f"ผิดพลาด: {error}", file=sys.stderr)
-        return 1
-    return 0
+            time.sleep(2)
 
 
 if __name__ == "__main__":

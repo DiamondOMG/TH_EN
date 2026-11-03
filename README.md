@@ -43,16 +43,23 @@ pio run -t upload
 
 อัปโหลดครั้งแรก: กด BOOT ค้างไว้ เสียบ USB แล้วปล่อย BOOT จากนั้นอัปโหลด firmware ตามขั้นตอน PlatformIO/BOOTSEL ที่รองรับบอร์ด หากอัปโหลดอัตโนมัติไม่พบพอร์ต ให้เข้า BOOTSEL แล้วอัปโหลดไฟล์ UF2 จาก `.pio/build/rp2040-zero/` ด้วยตนเอง
 
-## Windows Host App
+## ติดตั้ง Windows แบบ Auto-start
 
-ต้องเปิดโปรแกรมนี้ค้างไว้เพื่อให้จออัปเดตตามภาษาคีย์บอร์ดของหน้าต่างที่กำลังใช้งาน:
+ต้องใช้ Windows และ Python 3.10+; การติดตั้งครั้งแรกต้องต่ออินเทอร์เน็ตเพื่อ build แอปและดาวน์โหลด dependencies จากนั้นแอปจะเปิดเองหลัง sign in โดยไม่แสดงหน้าต่าง console
+
+เปิด Git Bash ในโฟลเดอร์โปรเจกต์ แล้วรัน:
 
 ```bash
-py -m pip install -r host-app/requirements.txt
-py host-app/keyboard_language.py --port COM6
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./host-app/setup_windows.ps1
 ```
 
-ถ้า COM เปลี่ยน สามารถละ `--port COM6` เพื่อให้โปรแกรมค้นหา RP2040 อัตโนมัติได้ จอจะแสดง `--` เมื่อยังไม่เชื่อมต่อหรือภาษาไม่ใช่ EN/TH
+ตัวติดตั้งข้างต้นลงแอปบนเครื่องนี้ สำหรับสร้างไฟล์ติดตั้งเพื่อแชร์ หลังมี `host-app/dist/OledLanguageIndicator.exe` แล้วรัน:
+
+```bash
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./host-app/build_shareable_installer.ps1
+```
+
+ได้ไฟล์แชร์ให้ผู้ใช้กดติดตั้งที่ `host-app/dist/OledLanguageIndicatorSetup.exe` แอปจะรอหา RP2040-Zero และเชื่อมต่อใหม่อัตโนมัติเมื่อบอร์ดเสียบทีหลัง ถ้าต้องการถอนการติดตั้ง ให้รัน `uninstall_windows.ps1` ในโฟลเดอร์ติดตั้งใต้ `%LOCALAPPDATA%/Programs/OledLanguageIndicator`
 
 ## Firmware Status
 
