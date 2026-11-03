@@ -6,7 +6,7 @@
 
 - MCU: RP2040, dual-core ARM Cortex-M0+
 - Flash: 2 MB per project hardware note
-- USB-powered; firmware starts automatically after USB power-up
+- USB powers the board and provides USB CDC Serial for the Windows host app
 - Onboard WS2812 RGB LED: GP16; unused by this firmware
 - I²C pins: GP4 (SDA), GP5 (SCL), Raspberry Pi Pico Arduino core default Wire pins
 
@@ -21,6 +21,13 @@
 ## Libraries
 
 - U8g2: SSD1306 128x64 hardware-I²C driver
+- Python `pyserial`: USB Serial link from Windows host app to the board
+
+## Host App Behavior
+
+- Reads the keyboard layout of the currently focused Windows application using `GetKeyboardLayout`
+- Sends `EN`, `TH`, or `--` over USB Serial when the detected state changes
+- Requires the host app to remain running for live status updates
 
 ## Datasheet / References
 

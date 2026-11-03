@@ -1,6 +1,6 @@
 # OLED EN TH
 
-เฟิร์มแวร์สำหรับ Raspberry Pi RP2040-Zero แสดง `EN TH` บนจอ OLED 0.96 นิ้ว I²C เมื่อเสียบ USB จ่ายไฟ หลังอัปโหลดแล้วไม่ต้องเปิดโปรแกรมบนคอม
+แสดงภาษาคีย์บอร์ด Windows ที่กำลังใช้งานเป็น `EN` หรือ `TH` ตัวใหญ่บน OLED 0.96 นิ้ว โดยโปรแกรมบนคอมอ่าน layout ของหน้าต่างที่กำลังใช้งานแล้วส่งให้ Raspberry Pi RP2040-Zero ผ่าน USB Serial
 
 ## Hardware
 
@@ -43,6 +43,17 @@ pio run -t upload
 
 อัปโหลดครั้งแรก: กด BOOT ค้างไว้ เสียบ USB แล้วปล่อย BOOT จากนั้นอัปโหลด firmware ตามขั้นตอน PlatformIO/BOOTSEL ที่รองรับบอร์ด หากอัปโหลดอัตโนมัติไม่พบพอร์ต ให้เข้า BOOTSEL แล้วอัปโหลดไฟล์ UF2 จาก `.pio/build/rp2040-zero/` ด้วยตนเอง
 
+## Windows Host App
+
+ต้องเปิดโปรแกรมนี้ค้างไว้เพื่อให้จออัปเดตตามภาษาคีย์บอร์ดของหน้าต่างที่กำลังใช้งาน:
+
+```bash
+py -m pip install -r host-app/requirements.txt
+py host-app/keyboard_language.py --port COM6
+```
+
+ถ้า COM เปลี่ยน สามารถละ `--port COM6` เพื่อให้โปรแกรมค้นหา RP2040 อัตโนมัติได้ จอจะแสดง `--` เมื่อยังไม่เชื่อมต่อหรือภาษาไม่ใช่ EN/TH
+
 ## Firmware Status
 
-ต้นแบบ; `pio run` ผ่านแล้ว แต่ยังไม่ได้ทดสอบกับบอร์ดจริง รุ่น OLED และ address ยังต้องตรวจยืนยัน
+ต้นแบบ; `pio run` ผ่านแล้ว รุ่น OLED และ address ยังต้องตรวจยืนยัน

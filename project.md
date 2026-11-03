@@ -20,12 +20,13 @@ related:
 
 ## Overview
 
-เฟิร์มแวร์สำหรับ Raspberry Pi RP2040-Zero ให้แสดงข้อความ `EN TH` บน OLED 0.96 นิ้วเมื่อจ่ายไฟผ่าน USB โดยทำงานบนบอร์ดเอง ไม่ต้องมีโปรแกรมบนคอมหลังอัปโหลดเฟิร์มแวร์
+ระบบแสดงภาษาคีย์บอร์ด Windows ที่กำลังใช้งานเป็น `EN` หรือ `TH` ตัวใหญ่บน OLED 0.96 นิ้ว โปรแกรมบนคอมอ่าน layout ของหน้าต่างที่กำลังใช้งานและส่งให้ RP2040-Zero ผ่าน USB Serial
 
 ## Goals
 
-- เริ่มแสดง `EN TH` หลังบอร์ดบูต
+- แสดง `EN` หรือ `TH` ตัวใหญ่ตาม keyboard layout ของหน้าต่าง foreground บน Windows
 - ใช้ OLED I²C 0.96 นิ้ว
+- ใช้โปรแกรม host บน Windows ส่งสถานะผ่าน USB Serial
 - พัฒนาและอัปโหลดด้วย PlatformIO + Arduino
 
 ## Hardware
@@ -54,7 +55,8 @@ related:
 
 ## Firmware Architecture
 
-- `src/main.cpp`: เริ่ม I²C, เริ่ม U8g2 และวาดข้อความคงที่ `EN TH`
+- `src/main.cpp`: อ่านคำสั่ง `EN`/`TH` ผ่าน USB Serial และแสดงคำย่อภาษาขนาดใหญ่บน OLED
+- `host-app/keyboard_language.py`: อ่าน keyboard layout ของหน้าต่างที่กำลังใช้งานบน Windows แล้วส่งสถานะผ่าน Serial
 
 ## Libraries
 
@@ -70,7 +72,8 @@ related:
 ## Current State
 
 - `pio run` ผ่านแล้วโดยใช้ PlatformIO Raspberry Pi platform / Arduino Mbed core กับ board target `pico`
-- ยังไม่ได้อัปโหลดหรือทดสอบกับบอร์ดจริง
+- Firmware แสดง `--` จนกว่า host app จะส่งสถานะภาษา
+- ยังไม่ได้ทดสอบ host app กับบอร์ดจริง
 - รุ่นคอนโทรลเลอร์ OLED และ I²C address จริงยังไม่ยืนยัน
 
 ## Open Questions
