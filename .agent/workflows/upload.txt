@@ -1,0 +1,8 @@
+Build และอัปโหลด firmware:
+
+```bash
+pio run
+pio run -t upload
+```
+
+แฟลชครั้งแรก หากอัปโหลดอัตโนมัติไม่พบอุปกรณ์: กด BOOT ค้างไว้ เสียบ USB แล้วปล่อย BOOT เพื่อเข้า BOOTSEL จากนั้นอัปโหลดผ่าน PlatformIO หรือคัดลอกไฟล์ UF2 จาก `.pio/build/rp2040-zero/` ไปยังไดรฟ์ `RPI-RP2` ตามขั้นตอนของบอร์ด
